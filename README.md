@@ -160,3 +160,7 @@ BAKE/img/products
 - File database H2 local không được đưa lên Git.
 - Thư mục build `target/` không được đưa lên Git.
 - Khi checkout, người dùng cần đăng nhập để backend tạo đơn hàng theo tài khoản.
+
+## Video demo
+
+
