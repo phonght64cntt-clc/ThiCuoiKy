@@ -1,38 +1,48 @@
-# BAKE - Bakery Store Website
+# BAKE - Website bán bánh ngọt
 
-Project: `64131798_HuynhThanhPhong_ThiCK`
+Tên project: `64131798_HuynhThanhPhong_ThiCK`
 
-BAKE is a bakery store web application with a static HTML/CSS/JavaScript frontend and a Spring Boot backend API. The application supports browsing products, adding items to cart, checkout, authentication, and viewing order history.
+BAKE là website bán bánh ngọt gồm frontend tĩnh bằng HTML/CSS/JavaScript và backend API bằng Spring Boot. Dự án hỗ trợ xem sản phẩm, lọc theo danh mục, thêm vào giỏ hàng, đăng nhập, đặt hàng và xem lịch sử đơn hàng.
 
-## Main Features
+## Chức năng chính
 
-- Landing page introducing the BAKE bakery brand.
-- Product page with 5 categories:
+- Trang chủ giới thiệu thương hiệu BAKE.
+- Trang sản phẩm với 5 danh mục:
   - Cake
   - Cupcake
   - Macaron
   - Cookie
   - Dessert
-- 30 bakery products, each with image, description, price, rating, and Add to Cart action.
-- Shopping cart page:
-  - View cart items
-  - Increase/decrease quantity
-  - Remove item
-  - Clear cart
-  - Order summary
-  - Checkout modal
-- Authentication:
-  - Login
-  - Logout
-  - JWT-based backend authentication
-- Order workflow:
-  - Add products to cart before login
-  - Login required before checkout
-  - Create order through backend API
-  - View My Orders page
-- Responsive UI matching the bakery theme with purple and pink colors.
+- 30 sản phẩm bánh, mỗi sản phẩm có:
+  - Hình ảnh
+  - Tên sản phẩm
+  - Mô tả
+  - Giá
+  - Đánh giá sao
+  - Nút thêm vào giỏ hàng
+- Trang giỏ hàng:
+  - Xem danh sách sản phẩm đã thêm
+  - Tăng/giảm số lượng
+  - Xóa từng sản phẩm
+  - Xóa toàn bộ giỏ hàng
+  - Xem tổng tiền
+  - Mở form nhập thông tin giao hàng
+- Chức năng tài khoản:
+  - Đăng nhập
+  - Đăng xuất
+  - Lưu token JWT ở phía frontend
+- Chức năng đặt hàng:
+  - Người dùng có thể thêm sản phẩm vào giỏ trước khi đăng nhập
+  - Khi thanh toán bắt buộc phải đăng nhập
+  - Gửi đơn hàng lên backend
+  - Lưu đơn hàng vào cơ sở dữ liệu H2
+- Trang đơn hàng:
+  - Xem lịch sử đơn hàng của người dùng
+  - Lọc đơn hàng theo trạng thái
+  - Hiển thị mã đơn, thời gian, số lượng sản phẩm, tổng tiền và trạng thái
+- Giao diện responsive, dùng tông màu tím và hồng theo phong cách tiệm bánh.
 
-## Technologies
+## Công nghệ sử dụng
 
 Frontend:
 
@@ -51,19 +61,19 @@ Backend:
 - H2 Database
 - Maven Wrapper
 
-## Project Structure
+## Cấu trúc thư mục
 
 ```text
 64131798_HuynhThanhPhong_ThiCK/
-├── BAKE/                 # Frontend static website
-│   ├── index.html
-│   ├── menu.html
-│   ├── order.html
-│   ├── orders.html
+├── BAKE/                 # Frontend
+│   ├── index.html        # Trang chủ
+│   ├── menu.html         # Trang sản phẩm
+│   ├── order.html        # Trang giỏ hàng/thanh toán
+│   ├── orders.html       # Trang lịch sử đơn hàng
 │   ├── css/
 │   ├── js/
 │   └── img/
-└── bake-backend/         # Spring Boot backend
+└── bake-backend/         # Backend Spring Boot
     ├── src/main/java/
     ├── src/main/resources/
     ├── pom.xml
@@ -71,70 +81,82 @@ Backend:
     └── mvnw.cmd
 ```
 
-## Default Test Account
+## Tài khoản test
 
 ```text
 Email: admin@bake.com
-Password: admin123
+Mật khẩu: admin123
 ```
 
-## How To Run
+## Cách chạy dự án
 
-### 1. Run Backend
+### 1. Chạy backend
 
-Open a terminal in `bake-backend` and run:
+Mở terminal tại thư mục `bake-backend`.
 
-```bash
-./mvnw spring-boot:run
-```
-
-On Windows PowerShell/CMD:
+Trên Windows:
 
 ```bat
 mvnw.cmd spring-boot:run
 ```
 
-By default, the backend is configured for port `8080`. If port `8080` is busy, run it on port `8081`:
+Nếu port `8080` đang bận, có thể chạy backend ở port `8081`:
 
 ```bat
 set SERVER_PORT=8081&&mvnw.cmd spring-boot:run
 ```
 
-The frontend currently uses:
+Frontend hiện đang gọi API tại:
 
 ```text
 http://localhost:8081/api
 ```
 
-This is configured in:
+Cấu hình này nằm trong file:
 
 ```text
 BAKE/js/api.js
 ```
 
-### 2. Run Frontend
+Nếu muốn dùng port khác, sửa biến `BASE_URL` trong file trên.
 
-Open the frontend by serving the `BAKE` folder with any static server. Example using Node:
+### 2. Chạy frontend
+
+Có thể mở frontend bằng một static server. Ví dụ dùng Node:
 
 ```bash
 npx http-server BAKE -p 5510 -a 127.0.0.1 -c-1
 ```
 
-Then open:
+Sau đó mở trình duyệt:
 
 ```text
 http://127.0.0.1:5510/menu.html
 ```
 
-## Main Pages
+## Các trang chính
 
-- `index.html`: Landing page
-- `menu.html`: Product listing and categories
-- `order.html`: Shopping cart and checkout
-- `orders.html`: User order history
+- `index.html`: Trang giới thiệu
+- `menu.html`: Trang sản phẩm và danh mục
+- `order.html`: Trang giỏ hàng và thanh toán
+- `orders.html`: Trang lịch sử đơn hàng
 
-## Notes
+## Dữ liệu mẫu
 
-- Local H2 database files are ignored by Git.
-- Product seed data is stored in `bake-backend/src/main/resources/data.sql`.
-- Product images are stored in `BAKE/img/products`.
+- Dữ liệu danh mục, sản phẩm và tài khoản admin được seed trong:
+
+```text
+bake-backend/src/main/resources/data.sql
+```
+
+- Hình ảnh sản phẩm nằm trong:
+
+```text
+BAKE/img/products
+```
+
+## Ghi chú
+
+- File database H2 local không được đưa lên Git.
+- Thư mục build `target/` không được đưa lên Git.
+- Khi checkout, người dùng cần đăng nhập để backend tạo đơn hàng theo tài khoản.
