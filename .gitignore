@@ -1,0 +1,26 @@
+# Build output
+target/
+**/target/
+
+# Local database/runtime files
+bake-backend/data/
+*.db
+*.lock.db
+*.mv.db
+
+# IDE and local tooling
+.idea/
+.vscode/
+.claude/
+
+# Logs and OS files
+*.log
+Thumbs.db
+desktop.ini
+
+# Node/npm temporary files if used for static serving
+node_modules/
+npm-debug.log*
+
+# Local assistant/tooling notes
+CLAUDE.md
