@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bake.bake_backend.entity.Order;
 import com.bake.bake_backend.entity.OrderItem;
@@ -13,6 +14,7 @@ import com.bake.bake_backend.repository.OrderRepository;
 import com.bake.bake_backend.repository.ProductRepository;
 import com.bake.bake_backend.repository.UserRepository;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,10 +24,15 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final EntityManager entityManager;
 
+    @Transactional
     public Order createOrder(String email, String address, List<Map<String, Object>> items) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại!"));
+                .orElseThrow(() -> new RuntimeException("User khong ton tai!"));
+
+        syncIdentity("orders");
+        syncIdentity("order_items");
 
         Order order = new Order();
         order.setUser(user);
@@ -40,7 +47,7 @@ public class OrderService {
             Integer quantity = Integer.valueOf(item.get("quantity").toString());
 
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại!"));
+                    .orElseThrow(() -> new RuntimeException("San pham khong ton tai!"));
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
@@ -59,7 +66,7 @@ public class OrderService {
 
     public List<Order> getMyOrders(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại!"));
+                .orElseThrow(() -> new RuntimeException("User khong ton tai!"));
         return orderRepository.findByUserId(user.getId());
     }
 
@@ -69,8 +76,17 @@ public class OrderService {
 
     public Order updateStatus(Long id, String status) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Đơn hàng không tồn tại!"));
+                .orElseThrow(() -> new RuntimeException("Don hang khong ton tai!"));
         order.setStatus(Order.Status.valueOf(status));
         return orderRepository.save(order);
+    }
+
+    private void syncIdentity(String tableName) {
+        Number nextId = (Number) entityManager
+                .createNativeQuery("SELECT COALESCE(MAX(id), 0) + 1 FROM " + tableName)
+                .getSingleResult();
+        entityManager
+                .createNativeQuery("ALTER TABLE " + tableName + " ALTER COLUMN id RESTART WITH " + nextId.longValue())
+                .executeUpdate();
     }
 }
