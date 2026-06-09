@@ -596,6 +596,18 @@
             box-shadow: 0 0 0 3px rgba(78, 42, 132, 0.1);
         }
 
+        .login-error {
+            display: none;
+            margin: -4px 0 14px;
+            color: var(--pink);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
         .login-submit {
             width: 100%;
             min-height: 42px;
@@ -807,6 +819,7 @@
             <h2>Login to BAKE</h2>
             <input id="login-email" type="email" placeholder="Email">
             <input id="login-password" type="password" placeholder="Password">
+            <div class="login-error" id="login-error"></div>
             <button class="login-submit" type="button" onclick="handleLogin()">LOGIN</button>
         </div>
     </div>
@@ -878,24 +891,36 @@
         }
 
         function openLogin() {
+            setLoginError('');
             document.getElementById('login-modal').classList.add('show');
         }
 
         function closeLogin() {
+            setLoginError('');
             document.getElementById('login-modal').classList.remove('show');
+        }
+
+        function setLoginError(message) {
+            const error = document.getElementById('login-error');
+            if (!error) return;
+            error.textContent = message;
+            error.classList.toggle('show', Boolean(message));
         }
 
         async function handleLogin() {
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
             if (!email || !password) {
+                setLoginError('Please enter email and password.');
                 showToast('Please enter email and password.');
                 return;
             }
 
             try {
+                setLoginError('');
                 const res = await api.login(email, password);
                 if (res.error) {
+                    setLoginError(res.error);
                     showToast(res.error);
                     return;
                 }
@@ -909,6 +934,7 @@
                 renderProducts();
                 showToast('Logged in successfully.');
             } catch (error) {
+                setLoginError('Could not connect to login API.');
                 showToast('Could not connect to login API.');
             }
         }
